@@ -1,0 +1,4 @@
+.App.gridContainer {
+  display: grid;
+  grid-gap: 5px;
+}
