@@ -16,21 +16,21 @@ class App extends Component {
     handlerSwitchState = () => {
         this.setState({logged_in:  !this.state.logged_in});
     };
+
     render() {
-        // const mainContent = this.state.logged_in ? 'Logged In Content - Child' : 'Logged Out Content - Child';
         let routes = (
             <Switch>
+                <Route path="/" exact component={Register} />
                 <Route path="/login" component={Login} />
-                <Route path="/" component={Register} />
                 <Redirect to="/" />
             </Switch>
         );
         if (this.state.logged_in) {
             routes = (
                 <Switch>
+                    <Route path="/" exact component={ContactsList} />
                     <Route path="/profile" component={Profile} />
                     <Route path="/logout" component={Logout} />
-                    <Route path="/" component={ContactsList} />
                     <Redirect to="/" />
                 </Switch>
             );

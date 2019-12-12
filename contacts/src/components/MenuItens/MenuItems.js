@@ -1,6 +1,6 @@
 import React from 'react';
 import {Nav} from "react-bootstrap";
-import {Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
 const MenuItems = (props) => {
     const logged_in = props.logged_in;
@@ -15,8 +15,8 @@ const MenuItems = (props) => {
         ]
     };
     let navLinks = logged_in ?
-        menuItems.logged_id.map((menuItem) => <Link key={menuItem.label} to={menuItem.href} className="nav-link">{menuItem.label}</Link>) :
-        menuItems.logged_out.map((menuItem) => <Link key={menuItem.label} to={menuItem.href} className="nav-link">{menuItem.label}</Link>);
+        menuItems.logged_id.map((menuItem) => <NavLink key={menuItem.label} to={menuItem.href} exact className="nav-link">{menuItem.label}</NavLink>) :
+        menuItems.logged_out.map((menuItem) => <NavLink key={menuItem.label} to={menuItem.href} exact className="nav-link">{menuItem.label}</NavLink>);
     return (
         <Nav>
             {navLinks}
