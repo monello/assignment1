@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter} from "react-router-dom";
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import "bootstrap-css-only/css/bootstrap.min.css";
+import "mdbreact/dist/css/mdb.css";
 import './index.css';
 
 const app = (
@@ -15,3 +17,5 @@ ReactDOM.render(app, document.getElementById('root'));
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+

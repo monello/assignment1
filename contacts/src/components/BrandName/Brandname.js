@@ -1,11 +1,11 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import {MDBNavbarBrand} from "mdbreact";
 
 const BrandName = (props) => (
-    <React.Fragment>
+    <MDBNavbarBrand>
         <Link to="/" className="navbar-brand">Contacts App</Link>
-    </React.Fragment>
-
+    </MDBNavbarBrand>
 );
 
 export default BrandName;

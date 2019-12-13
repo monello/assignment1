@@ -1,29 +1,40 @@
 import React from 'react';
-import {Nav} from "react-bootstrap";
-import {NavLink} from 'react-router-dom';
+import {MDBNavItem, MDBNavLink} from "mdbreact";
 import {withRouter} from 'react-router-dom';
 
 const MenuItems = (props) => {
     let menuItems = [];
     if (props.logged_in) {
         menuItems = [
-            {href: '/', label: 'Contacts'},
+            {href: '/contacts', label: 'Contacts'},
             {href: '/profile', label: 'Profile'},
             {href: '/logout', label: 'Logout'}
         ];
     } else {
-        if (props.match.path === '/' && props.match.isExact) {
-            menuItems = [{href: '/login', label: 'Login'}]
+        if (props.location.pathname === '/register') {
+            menuItems = [{href: '/login', label: 'Login'}];
+        } else if(props.location.pathname === '/login') {
+            menuItems = [{href: '/register', label: 'Register'}];
         } else {
-            menuItems = [{href: '/', label: 'Register'}]
+            menuItems = [
+                {href: '/register', label: 'Register'},
+                {href: '/login', label: 'Login'}
+            ];
         }
     }
-    const navLinks = menuItems.map((menuItem) => <NavLink key={menuItem.label} to={menuItem.href} exact className="nav-link">{menuItem.label}</NavLink>);
+    const navLinks = menuItems.map((menuItem) => {
+        const isActive = props.location.pathname === menuItem.href ? 'active' : '';
+        return(
+            <MDBNavItem active={isActive}>
+                <MDBNavLink key={menuItem.label} to={menuItem.href} exact className="nav-link">{menuItem.label}</MDBNavLink>
+            </MDBNavItem>
+        )
+    });
     return (
-        <Nav>
+        <React.Fragment>
             {navLinks}
-        </Nav>
-    );
+        </React.Fragment>
+    )
 };
 
 export default withRouter(MenuItems);

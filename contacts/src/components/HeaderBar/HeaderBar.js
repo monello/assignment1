@@ -1,21 +1,44 @@
-import React from 'react';
-
+import React, { Component } from "react";
 import BrandName from "../BrandName/Brandname";
 import MenuItems from "../MenuItens/MenuItems";
-import {Navbar, Nav} from 'react-bootstrap';
-import {Link} from 'react-router-dom';
+import {
+    MDBNavbar,
+    MDBNavbarNav,
+    MDBNavbarToggler,
+    MDBCollapse,
+    MDBContainer, MDBNavLink, MDBNavItem
+} from "mdbreact";
+import { withRouter} from 'react-router-dom';
 
-const HeaderBar = (props) => (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <BrandName/>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="mr-auto">
-                <Link to="/" className="nav-link">Home</Link>
-            </Nav>
-            <MenuItems logged_in={props.logged_in}/>
-        </Navbar.Collapse>
-    </Navbar>
-);
+class HeaderBar extends Component {
+    state = {
+        isOpen: false
+    };
 
-export default HeaderBar;
+    toggleCollapse = () => {
+        this.setState({ isOpen: !this.state.isOpen });
+    };
+
+    render() {
+        return (
+            <MDBNavbar color="default-color" dark expand="md">
+                <MDBContainer>
+                    <BrandName/>
+                    <MDBNavbarToggler onClick={this.toggleCollapse} />
+                    <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
+                        <MDBNavbarNav left>
+                            <MDBNavItem active={this.props.location.pathname === '/' ? 'active' : ''}>
+                                <MDBNavLink to="/" exact className="nav-link">Home</MDBNavLink>
+                            </MDBNavItem>
+                        </MDBNavbarNav>
+                        <MDBNavbarNav right>
+                            <MenuItems logged_in={this.props.logged_in}/>
+                        </MDBNavbarNav>
+                    </MDBCollapse>
+                </MDBContainer>
+            </MDBNavbar>
+        );
+    }
+}
+
+export default withRouter(HeaderBar);

@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import Layout from "./hoc/Layout/Layout";
+import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import Logout from "./components/Logout/Logout";
 import Register from "./components/Register/Register";
-import Profile from "./components/Profile/Profile";
-import ContactsList from "./components/ContactsList/ContactsList";
+import Profile from "./containers/Profile/Profile";
+import Contacts from "./containers/Contacts/Contacts";
 import './App.css';
 
 class App extends Component {
@@ -20,7 +21,8 @@ class App extends Component {
     render() {
         let routes = (
             <Switch>
-                <Route path="/" exact component={Register} />
+                <Route path="/" exact component={Home} />
+                <Route path="/register" exact component={Register} />
                 <Route path="/login" component={Login} />
                 <Redirect to="/" />
             </Switch>
@@ -28,7 +30,8 @@ class App extends Component {
         if (this.state.logged_in) {
             routes = (
                 <Switch>
-                    <Route path="/" exact component={ContactsList} />
+                    <Route path="/" exact component={Home} />
+                    <Route path="/contacts" exact component={Contacts} />
                     <Route path="/profile" component={Profile} />
                     <Route path="/logout" component={Logout} />
                     <Redirect to="/" />
