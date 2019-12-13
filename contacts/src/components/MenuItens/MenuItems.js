@@ -25,8 +25,8 @@ const MenuItems = (props) => {
     const navLinks = menuItems.map((menuItem) => {
         const isActive = props.location.pathname === menuItem.href ? 'active' : '';
         return(
-            <MDBNavItem active={isActive}>
-                <MDBNavLink key={menuItem.label} to={menuItem.href} exact className="nav-link">{menuItem.label}</MDBNavLink>
+            <MDBNavItem key={menuItem.label} active={isActive}>
+                <MDBNavLink to={menuItem.href} exact className="nav-link">{menuItem.label}</MDBNavLink>
             </MDBNavItem>
         )
     });

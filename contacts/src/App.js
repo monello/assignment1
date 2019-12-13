@@ -10,9 +10,12 @@ import Contacts from "./containers/Contacts/Contacts";
 import './App.css';
 
 class App extends Component {
-    state = {
-        logged_in: false
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            logged_in: false
+        };
+    }
 
     handlerSwitchState = () => {
         this.setState({logged_in:  !this.state.logged_in});
