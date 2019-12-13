@@ -1,22 +1,24 @@
 import React from 'react';
 import {Nav} from "react-bootstrap";
 import {NavLink} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
 const MenuItems = (props) => {
-    const logged_in = props.logged_in;
-    const menuItems = {
-        'logged_id': [
+    let menuItems = [];
+    if (props.logged_in) {
+        menuItems = [
             {href: '/', label: 'Contacts'},
             {href: '/profile', label: 'Profile'},
             {href: '/logout', label: 'Logout'}
-        ],
-        'logged_out': [
-            {href: '/login', label: 'Login'}
-        ]
-    };
-    let navLinks = logged_in ?
-        menuItems.logged_id.map((menuItem) => <NavLink key={menuItem.label} to={menuItem.href} exact className="nav-link">{menuItem.label}</NavLink>) :
-        menuItems.logged_out.map((menuItem) => <NavLink key={menuItem.label} to={menuItem.href} exact className="nav-link">{menuItem.label}</NavLink>);
+        ];
+    } else {
+        if (props.match.path === '/' && props.match.isExact) {
+            menuItems = [{href: '/login', label: 'Login'}]
+        } else {
+            menuItems = [{href: '/', label: 'Register'}]
+        }
+    }
+    const navLinks = menuItems.map((menuItem) => <NavLink key={menuItem.label} to={menuItem.href} exact className="nav-link">{menuItem.label}</NavLink>);
     return (
         <Nav>
             {navLinks}
@@ -24,4 +26,4 @@ const MenuItems = (props) => {
     );
 };
 
-export default MenuItems;
+export default withRouter(MenuItems);
