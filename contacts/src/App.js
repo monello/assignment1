@@ -4,6 +4,7 @@ import Layout from "./hoc/Layout/Layout";
 import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import Logout from "./components/Logout/Logout";
+import ExampleFormPage from "./containers/Temp/ExampleFormPage";
 import Register from "./components/Register/Register";
 import Profile from "./containers/Profile/Profile";
 import Contacts from "./containers/Contacts/Contacts";
@@ -34,6 +35,7 @@ class App extends Component {
             routes = (
                 <Switch>
                     <Route path="/" exact component={Home} />
+                    <Route path="/exampleform" exact component={ExampleFormPage} />
                     <Route path="/contacts" exact component={Contacts} />
                     <Route path="/profile" component={Profile} />
                     <Route path="/logout" component={Logout} />

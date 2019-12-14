@@ -6,6 +6,7 @@ const MenuItems = (props) => {
     let menuItems = [];
     if (props.logged_in) {
         menuItems = [
+            {href: '/exampleform', label: 'Example Form'},
             {href: '/contacts', label: 'Contacts'},
             {href: '/profile', label: 'Profile'},
             {href: '/logout', label: 'Logout'}

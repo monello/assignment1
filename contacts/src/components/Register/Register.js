@@ -9,24 +9,74 @@ import {
     MDBCardBody,
     MDBIcon
 } from 'mdbreact';
+import axios from '../../axios-contacts';
 
 class Register extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: 'morne.louw',
-            email: 'louw.morne@gmail.com',
-            first_name: 'Morne',
-            last_name: 'Louw'
+            username: '',
+            email: '',
+            first_name: '',
+            last_name: ''
         };
     }
 
-    submitHandler = event => {
+    componentDidMount() {
+        fetch('/api/user/46')
+            .then(res => res.json())
+            .then(users => console.log(users))
+            .catch(error => console.log(error));
+    }
+
+    handleSubmit = event => {
         event.preventDefault();
         event.target.className += " was-validated";
+        console.log(this.state);
+        // const data = {
+        //     method: 'POST',
+        //     headers: {'Content-Type': 'application/json'},
+        //     body: JSON.stringify({
+        //         username        : "morne.louw012",
+        //         email           : "test012@gmail.com",
+        //         password        : "P@ssword123",
+        //         first_name      : "First Name",
+        //         last_name       : "TestLName",
+        //         date_of_birth   : "1952-12-09",
+        //         gender          : "Male",
+        //         country_id      : "167"
+        //     })
+        // };
+        axios.post(
+            '/api/user',
+            {
+                username        : "morne.louw014",
+                email           : "test014@gmail.com",
+                password        : "P@ssword123",
+                first_name      : "First Name",
+                last_name       : "TestLName",
+                date_of_birth   : "1952-12-09",
+                gender          : "Male",
+                country_id      : "167"
+            },
+            { headers: { 'Content-Type': 'application/json' } }
+        ).then(response => {
+            const data = response.data.data;
+            console.log("Response: ", data)
+        }).catch(error => {
+            console.log("ERROR:", error);
+        });
+        // fetch('/api/user', data)
+        //     .then(response => {
+        //         console.log("RESPONSE: ", response.json());
+        //     })
+        //     .then(data => console.log(data))
+        //     .catch(error => {
+        //        console.log(error)
+        //     });
     };
 
-    changeHandler = event => {
+    handleChange = event => {
         this.setState({ [event.target.name]: event.target.value });
     };
 
@@ -37,8 +87,12 @@ class Register extends Component {
                     <MDBCol md="6">
                         <MDBCard>
                             <MDBCardBody>
-                                <form className="needs-validation" onSubmit={this.submitHandler} noValidate >
-                                    <p className="h4 text-center py-4">Sign up</p>
+                                <form
+                                    className="needs-validation"
+                                    onSubmit={this.handleSubmit}
+                                    noValidate
+                                >
+                                    <p className="h4 text-center py-4">Register</p>
                                     <div className="grey-text">
                                         <MDBInput
                                             label="Your First Name"
@@ -48,10 +102,11 @@ class Register extends Component {
                                             validate
                                             error="wrong"
                                             success="right"
-                                            value={this.state.first_name}
                                             name="first_name"
-                                            onChange={this.changeHandler}
+                                            onChange={this.handleChange}
+                                            required
                                         />
+                                        <div className="valid-feedback">Looks good!</div>
                                         <MDBInput
                                             label="Your Last Name"
                                             icon="user"
@@ -60,10 +115,14 @@ class Register extends Component {
                                             validate
                                             error="wrong"
                                             success="right"
-                                            value={this.state.last_name}
                                             name="last_name"
-                                            onChange={this.changeHandler}
+                                            onChange={this.handleChange}
+                                            required
                                         />
+                                        <div className="valid-feedback">Looks good!</div>
+                                        <small id="emailHelp" className="form-text text-muted">
+                                            We'll never share your email with anyone else.
+                                        </small>
                                         <MDBInput
                                             label="Your email"
                                             icon="envelope"
@@ -72,9 +131,9 @@ class Register extends Component {
                                             validate
                                             error="wrong"
                                             success="right"
-                                            value={this.state.email}
                                             name="email"
-                                            onChange={this.changeHandler}
+                                            onChange={this.handleChange}
+                                            required
                                         />
                                         <MDBInput
                                             label="Confirm your email"
@@ -85,7 +144,8 @@ class Register extends Component {
                                             error="wrong"
                                             success="right"
                                             name="email"
-                                            onChange={this.changeHandler}
+                                            onChange={this.handleChange}
+                                            required
                                         />
                                         <MDBInput
                                             label="Your Username"
@@ -95,9 +155,9 @@ class Register extends Component {
                                             validate
                                             error="wrong"
                                             success="right"
-                                            value={this.state.username}
                                             name="username"
-                                            onChange={this.changeHandler}
+                                            onChange={this.handleChange}
+                                            required
                                         />
                                         <MDBInput
                                             label="Your password"
@@ -106,12 +166,13 @@ class Register extends Component {
                                             type="password"
                                             validate
                                             name="password"
-                                            onChange={this.changeHandler}
+                                            onChange={this.handleChange}
+                                            required
                                         />
                                     </div>
                                     <div className="text-center py-4 mt-3">
                                         <MDBBtn color="cyan" type="submit">
-                                            Register <MDBIcon far icon="paper-plane" className="ml-1" />
+                                            Submit <MDBIcon far icon="paper-plane" className="ml-1" />
                                         </MDBBtn>
                                     </div>
                                 </form>
