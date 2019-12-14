@@ -37,11 +37,16 @@ class Login extends Component {
             const data = response.data.data;
             console.log("Data: ", data); // TODO Remove this when done
             // set the global logged in status
-            this.props.onToggleLoggedIn(true);
+            this.props.onToggleLoggedIn(
+                true,
+                data.session_id,
+                data.access_token
+            );
             //navigate to the Profile page
             this.props.history.push({pathname: '/profile'});
         }).catch(error => {
-            console.error(error.response.data.messages);
+            this.setState({error: error.response.data.messages});
+            console.error(error.response.data.messages); // TODO Remove this
         });
     };
 
@@ -117,13 +122,22 @@ const mapStateToProps = state => {
     return {
         // left side is what it will be called inside the component eg. this.props.isLoggedIn
         // right side must must match the name of this property in the global state (store)
-        isLoggedIn: state.isLoggedIn
+        isLoggedIn: state.isLoggedIn,
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onToggleLoggedIn: (state) => dispatch({type: 'SET_LOGGED_IN', newState: state})
+        onToggleLoggedIn: (state, sessionId, accessToken) => dispatch(
+            {
+                type: 'SET_LOGGED_IN',
+                payload: {
+                    newState: state,
+                    newSessionId: sessionId,
+                    newAccessToken: accessToken
+                }
+            }
+        )
     }
 };
 

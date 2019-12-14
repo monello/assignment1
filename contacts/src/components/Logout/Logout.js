@@ -14,16 +14,16 @@ class Logout extends Component {
 
     componentDidMount() {
         axios.delete(
-            '/api/session/' + this.props.sessionId,
+            '/api/session/' + this.props.authData.sessionId,
             { headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'NjdlOWRhNDQzYWIwOGEyNWZkNTc0ZmJlNzNiNGUwZDUxMzQzODgyMjhmOTQ4ZDFlMTU3NjM2MDU2Ng=='
+                'Authorization': this.props.authData.accessToken
             }}
         ).then(response => {
-            this.props.onToggleLoggedIn(false);
+            this.props.onLoggedOut();
         }).catch(error => {
             this.setState({error: error.response.data.messages});
-            console.error(error.response.data.messages);
+            console.error(error.response.data.messages); // TODO Remove this
         });
     }
 
@@ -38,13 +38,13 @@ class Logout extends Component {
 
 const mapStateToProps = state => {
     return {
-        sessionId: state.sessionId
+        authData: state.auth
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onToggleLoggedIn: (state) => dispatch({type: 'SET_LOGGED_IN', newState: state})
+        onLoggedOut: () => dispatch({type: 'SET_LOGGED_OUT'})
     }
 };
 

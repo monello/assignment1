@@ -1,6 +1,49 @@
 const initialState = {
+    foo: "bar",
     isLoggedIn: false,
-    sessionId: 4
+    auth: {
+        userId: null,
+        sessionId: 7, // TODO Remove this
+        accessToken: "ZjYwZmVmMGY0MDgzM2U1NmI1NDU3NWIxZWQzZGI0NzQxM2YwMTFlNTYxNjc3NDQyMTU3NjM2NDM4OA==", // TODO Remove this
+        accessTokenExpiry: null,
+        refreshToken: null,
+        refreshTokenExpiry: null
+    }
+
+};
+
+const setLoggedIn = (state, action) => {
+    let authData = {
+        ...state.auth,
+        sessionId : action.sessionId,
+        accessToken: action.accessToken,
+        userId: action.userId,
+        accessTokenExpiry: action.accessTokenExpiry,
+        refreshToken: action.refreshToken,
+        refreshTokenExpiry: action.refreshTokenExpiry
+    };
+    return {
+        ...state,
+        isLoggedIn: false,
+        auth: authData
+    };
+};
+
+const setLoggedOut = (state, action) => {
+    let authData = {
+        ...state.auth,
+        sessionId : null,
+        accessToken: null,
+        userId: null,
+        accessTokenExpiry: null,
+        refreshToken: null,
+        refreshTokenExpiry: null
+    };
+    return {
+        ...state,
+        isLoggedIn: false,
+        auth: authData
+    };
 };
 
 // A reducer is used to update the central state (store) of your application
@@ -17,11 +60,8 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 isLoggedIn: !state.isLoggedIn
             };
-        case 'SET_LOGGED_IN':
-            return {
-                ...state,
-                isLoggedIn: action.newState
-            };
+        case 'SET_LOGGED_OUT':  return setLoggedOut(state, action);
+        case 'SET_LOGGED_IN':   return setLoggedIn(state, action);
         default:
             return state;
     }

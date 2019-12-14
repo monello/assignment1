@@ -90,7 +90,7 @@ class Register extends Component {
             this.props.history.push({pathname: '/login'});
         }).catch(error => {
             this.setState({error: error.response.data.messages});
-            console.error(error.response.data.messages);
+            console.error(error.response.data.messages); // TODO Remove this
         });
     };
 
