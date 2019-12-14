@@ -1,0 +1,7 @@
+.Spinner {
+    /* properties required to make the mx-auto class center this element.
+     The 50px top and bottom margins are not required for centering it was just added for this implementation */
+    display: block;
+    margin: 50px auto;
+    width: 40px;
+}

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
+import {connect} from 'react-redux';
 import Layout from "./hoc/Layout/Layout";
 import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
@@ -11,16 +12,16 @@ import Contacts from "./containers/Contacts/Contacts";
 import './App.css';
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            logged_in: false
-        };
-    }
-
-    handlerSwitchState = () => {
-        this.setState({logged_in:  !this.state.logged_in});
-    };
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         logged_in: false
+    //     };
+    // }
+    //
+    // handlerSwitchState = () => {
+    //     this.setState({logged_in:  !this.state.logged_in});
+    // };
 
     render() {
         let routes = (
@@ -31,7 +32,7 @@ class App extends Component {
                 <Redirect to="/" />
             </Switch>
         );
-        if (this.state.logged_in) {
+        if (this.props.isLoggedIn) {
             routes = (
                 <Switch>
                     <Route path="/" exact component={Home} />
@@ -45,11 +46,23 @@ class App extends Component {
         }
         return (
             <div className="App gridContainer">
-                <Layout logged_in={this.state.logged_in}>{routes}</Layout>
-                <button onClick={this.handlerSwitchState}>Switch State</button>
+                <Layout logged_in={this.props.isLoggedIn}>{routes}</Layout>
+                <button onClick={this.props.onSwitchState}>Switch State</button>
             </div>
         );
     }
 }
 
-export default App;
+const mapStateToProps = state => {
+    return {
+        isLoggedIn: state.isLoggedIn
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSwitchState: () => dispatch({type: 'SWITCH_STATE'})   // TODO remove the action as it's ust temporary for testing. Also remove thr button above that triggers this action
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
