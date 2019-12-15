@@ -12,10 +12,12 @@ class Login extends Component {
         super(props);
         this.state = {
             fields: {
-                username: '',
-                password: ''
+                username: {value: '', valid: false},
+                password: {value: '', valid: false}
             },
-            error: ''
+            error: '',
+            alertHidden: true,
+            alertMessage: ''
         };
     }
 
@@ -34,19 +36,29 @@ class Login extends Component {
             submitData,
             { headers: { 'Content-Type': 'application/json' } }
         ).then(response => {
+            console.log(response);
             const data = response.data.data;
             console.log("Data: ", data); // TODO Remove this when done
             // set the global logged in status
-            this.props.onToggleLoggedIn(
-                true,
-                data.session_id,
-                data.access_token
-            );
+            const payload = {
+                sessionId           : data.user.session_id,
+                accessToken         : data.user.access_token,
+                userId              : data.user.user_id,
+                accessTokenExpiry   : data.user.access_token_expiry,
+                refreshToken        : data.user.refresh_token,
+                refreshTokenExpiry  : data.user.refresh_token_expiry
+            };
+            this.props.onToggleLoggedIn(payload);
             //navigate to the Profile page
             this.props.history.push({pathname: '/profile'});
         }).catch(error => {
-            this.setState({error: error.response.data.messages});
-            console.error(error.response.data.messages); // TODO Remove this
+            if (parseInt(error.response.data.statusCode) === 401) {
+                console.info("A:", error.response.data.messages);
+                this.setState({alertHidden: false, alertMessage: error.response.data.messages});
+            } else {
+                this.setState({error: error.response.data.messages});
+                console.error("B:", error.response.data); // TODO Remove this
+            }
         });
     };
 
@@ -61,6 +73,7 @@ class Login extends Component {
         <MDBContainer>
             <MDBRow center>
                 <MDBCol md="6">
+                    <Alert heading="Oops, something went wrong" type="danger" isHidden={this.state.alertHidden}><p>{this.state.alertMessage}</p></Alert>
                     <MDBCard>
                         <MDBCardBody>
                             <form
@@ -79,7 +92,7 @@ class Login extends Component {
                                         error="wrong"
                                         success="right"
                                         name="username"
-                                        value={this.state.fields.username}
+                                        value={this.state.fields.username.value}
                                         onChange={this.handleInputChange}
                                         required
                                     />
@@ -128,16 +141,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onToggleLoggedIn: (state, sessionId, accessToken) => dispatch(
-            {
-                type: 'SET_LOGGED_IN',
-                payload: {
-                    newState: state,
-                    newSessionId: sessionId,
-                    newAccessToken: accessToken
-                }
-            }
-        )
+        onToggleLoggedIn: (payload) => dispatch({type: 'SET_LOGGED_IN', payload: payload})
     }
 };
 

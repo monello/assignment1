@@ -21,15 +21,15 @@ class Register extends Component {
         super(props);
         this.state = {
             fields: {
-                first_name: 'Morne',
-                last_name: 'Louw',
-                email: 'louw.morne@gmail.com',
-                confirm_email: 'louw.morne@gmail.com',
-                username: 'mornelouw',
-                password: 'Password',
+                first_name: '',
+                last_name: '',
+                email: '',
+                confirm_email: '',
+                username: '',
+                password: '',
                 date_of_birth: '',
-                gender: 'Male',
-                country_id : 167
+                gender: '',
+                country_id : ''
             },
             loading: true,
             countries: [],

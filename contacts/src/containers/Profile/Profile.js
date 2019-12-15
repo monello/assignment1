@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow} from "mdbreact";
 
 class Profile extends Component {
     constructor(props) {
@@ -16,7 +17,17 @@ class Profile extends Component {
     }
     render() {
         return (
-            <div>Profile CONTAINER UPDATED Component</div>
+            <MDBContainer>
+                <MDBRow center>
+                    <MDBCol md="6">
+                        <MDBCard>
+                            <MDBCardBody>
+                                Example Page Content
+                            </MDBCardBody>
+                        </MDBCard>
+                    </MDBCol>
+                </MDBRow>
+            </MDBContainer>
         )
     }
 }

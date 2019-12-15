@@ -4,10 +4,14 @@ import { MDBContainer, MDBAlert } from 'mdbreact';
 import './Alert.css';
 
 const Alert = (props) => {
-    const classes = props.type ? props.type : 'warning';
+    const color = props.type ? props.type : 'warning';
+    let classes = 'Alert';
+    if (props.isHidden) {
+        classes = classes + ' hidden';
+    }
     return (
         <MDBContainer>
-            <MDBAlert className="Alert" color={classes}>
+            <MDBAlert className={classes} color={color}>
                 <h4 className="alert-heading">{props.heading ? props.heading : <span>Please Note</span>}</h4>
                 {props.children}
             </MDBAlert>

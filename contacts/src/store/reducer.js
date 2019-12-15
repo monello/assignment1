@@ -3,8 +3,8 @@ const initialState = {
     isLoggedIn: false,
     auth: {
         userId: null,
-        sessionId: 7, // TODO Remove this
-        accessToken: "ZjYwZmVmMGY0MDgzM2U1NmI1NDU3NWIxZWQzZGI0NzQxM2YwMTFlNTYxNjc3NDQyMTU3NjM2NDM4OA==", // TODO Remove this
+        sessionId: null,
+        accessToken: null,
         accessTokenExpiry: null,
         refreshToken: null,
         refreshTokenExpiry: null
@@ -15,16 +15,16 @@ const initialState = {
 const setLoggedIn = (state, action) => {
     let authData = {
         ...state.auth,
-        sessionId : action.sessionId,
-        accessToken: action.accessToken,
-        userId: action.userId,
-        accessTokenExpiry: action.accessTokenExpiry,
-        refreshToken: action.refreshToken,
-        refreshTokenExpiry: action.refreshTokenExpiry
+        sessionId           : action.payload.sessionId,
+        accessToken         : action.payload.accessToken,
+        userId              : action.payload.userId,
+        accessTokenExpiry   : action.payload.accessTokenExpiry,
+        refreshToken        : action.payload.refreshToken,
+        refreshTokenExpiry  : action.payload.refreshTokenExpiry
     };
     return {
         ...state,
-        isLoggedIn: false,
+        isLoggedIn: true,
         auth: authData
     };
 };
@@ -54,14 +54,8 @@ const setLoggedOut = (state, action) => {
 const reducer = (state = initialState, action) => {
     // component set the action.type inside their mapDispatchToProps
     switch(action.type) {
-        // TODO remove the action as it's ust temprary for testing
-        case 'SWITCH_STATE':
-            return {
-                ...state,
-                isLoggedIn: !state.isLoggedIn
-            };
-        case 'SET_LOGGED_OUT':  return setLoggedOut(state, action);
-        case 'SET_LOGGED_IN':   return setLoggedIn(state, action);
+        case 'SET_LOGGED_OUT'   : return setLoggedOut(state, action);
+        case 'SET_LOGGED_IN'    : return setLoggedIn(state, action);
         default:
             return state;
     }
