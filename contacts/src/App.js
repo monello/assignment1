@@ -18,19 +18,19 @@ class App extends Component {
     render() {
         let routes = (
             <Switch>
-                <Route path="/" exact component={Home} />
                 <Route path="/register" exact component={Register} />
                 <Route path="/login" component={Login} />
+                <Route path="/" exact component={Home} />
                 <Redirect to="/" />
             </Switch>
         );
         if (this.props.isLoggedIn) {
             routes = (
                 <Switch>
-                    <Route path="/" exact component={Home} />
                     <Route path="/contacts" exact component={Contacts} />
                     <Route path="/profile" component={Profile} />
                     <Route path="/logout" component={Logout} />
+                    <Route path="/" exact component={Home} />
                     <Redirect to="/" />
                 </Switch>
             );

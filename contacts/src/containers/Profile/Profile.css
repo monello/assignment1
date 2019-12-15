@@ -1,0 +1,6 @@
+.contactNumberRow.hidden {
+    display: none
+}
+.contactNumberRow.visible {
+    display: block;
+}
