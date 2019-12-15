@@ -11,6 +11,10 @@ import Contacts from "./containers/Contacts/Contacts";
 import './App.css';
 
 class App extends Component {
+    componentDidMount() {
+        this.props.tryAutoLogin();
+    }
+
     render() {
         let routes = (
             <Switch>
@@ -45,4 +49,10 @@ const mapStateToProps = state => {
     }
 };
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = dispatch => {
+    return {
+        tryAutoLogin: () => dispatch({type: 'TRY_AUTO_LOGIN'})
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
