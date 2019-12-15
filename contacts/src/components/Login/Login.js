@@ -70,7 +70,7 @@ class Login extends Component {
     };
 
     formBody = () => (
-        <MDBContainer>
+        <MDBContainer className="mt-4">
             <MDBRow center>
                 <MDBCol md="6">
                     <Alert heading="Oops, something went wrong" type="danger" isHidden={this.state.alertHidden}><p>{this.state.alertMessage}</p></Alert>

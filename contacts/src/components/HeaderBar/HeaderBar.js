@@ -21,7 +21,7 @@ class HeaderBar extends Component {
 
     render() {
         return (
-            <MDBNavbar color="default-color" dark expand="md">
+            <MDBNavbar color="teal" dark expand="md">
                 <MDBContainer>
                     <BrandName/>
                     <MDBNavbarToggler onClick={this.toggleCollapse} />

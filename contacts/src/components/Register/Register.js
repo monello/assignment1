@@ -109,7 +109,7 @@ class Register extends Component {
     };
 
     formBody = () => (
-        <MDBContainer>
+        <MDBContainer className="mt-4">
             <MDBRow center>
                 <MDBCol md="6">
                     <MDBCard>
