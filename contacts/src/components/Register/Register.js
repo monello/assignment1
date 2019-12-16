@@ -78,19 +78,16 @@ class Register extends Component {
             gender          : this.state.fields.gender,
             country_id      : this.state.fields.country_id
         };
-        console.log("Submit Data:", submitData); // TODO remove this when done
         axios.post(
             '/api/user',
             submitData,
             { headers: { 'Content-Type': 'application/json' } }
         ).then(response => {
             const data = response.data.data;
-            console.log("Data: ", data); // TODO Remove this when done
             //navigate to the Log-in page
             this.props.history.push({pathname: '/login'});
         }).catch(error => {
             this.setState({error: error.response.data.messages});
-            console.error(error.response.data.messages); // TODO Remove this
         });
     };
 
