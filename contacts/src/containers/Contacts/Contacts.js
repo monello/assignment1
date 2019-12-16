@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 class Contacts extends Component {
     render() {
         return (
-            <div>Contacts Refactored List Page</div>
+            <div>The Contacts Manager App will go here.</div>
         );
     }
 }

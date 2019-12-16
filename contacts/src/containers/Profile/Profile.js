@@ -47,9 +47,10 @@ class Profile extends Component {
                 number: ''
             },
             activePhone: {
-                country_code: '+27',
-                number: '082 345 6789',
-                type: 1,
+                id: '',
+                country_code: '',
+                number: '',
+                type: '',
                 is_primary: false
             }
         };
@@ -159,6 +160,80 @@ class Profile extends Component {
         });
     };
 
+    handlePhoneSubmit = event => {
+        event.preventDefault();
+        event.target.className += " was-validated";
+        const userId = localStorage.getItem('userId');
+        const accessToken = localStorage.getItem('accessToken');
+        // Build Submit Payload
+        const submitData = {
+            country_code    : this.state.activePhone.country_code,
+            number          : this.state.activePhone.number,
+            type            : this.state.activePhone.type,
+            is_primary      : !!+this.state.activePhone.is_primary
+        };
+        console.log("SUBMIT DATA:", submitData);
+
+        if (this.state.activePhone.id) {
+            axios.put(
+                '/api/user/' + userId + '/contactnumber/' + this.state.activePhone.id,
+                [submitData],
+                { headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': accessToken
+                    } }
+            ).then(response => {
+                const data = response.data.data;
+                console.log("Data: ", data); // TODO Remove this when done
+                console.log(this.state.data);
+                // clean out the touched data
+                this.setState({
+                    touched: {},
+                    activeNumber: {
+                        id: '',
+                        country_code: '',
+                        number: '',
+                        type: '',
+                        is_primary: false
+                    }
+                });
+                this.toggleAddEditPhoneModal();
+            }).catch(error => {
+                this.setState({error: error.response.data.messages});
+                console.error(error.response.data.messages); // TODO Remove this
+            });
+        } else {
+            axios.post(
+                '/api/user/' + userId + '/contactnumber',
+                [submitData],
+                { headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': accessToken
+                    } }
+            ).then(response => {
+                const data = response.data.data;
+                console.log("Data: ", data); // TODO Remove this when done
+                console.log(this.state.data);
+                // clean out the touched data
+                this.setState({
+                    touched: {},
+                    activeNumber: {
+                        id: '',
+                        country_code: '',
+                        number: '',
+                        type: '',
+                        is_primary: false
+                    }
+                });
+                this.toggleAddEditPhoneModal();
+            }).catch(error => {
+                this.setState({error: error.response.data.messages});
+                console.error(error.response.data.messages); // TODO Remove this
+            });
+        }
+
+    };
+
     handleInputChange = event => {
         // Handle two-way binding - Update Immutably
         const updatedFields = {...this.state.data};
@@ -180,6 +255,22 @@ class Profile extends Component {
         }
         updatedFields[event.target.name] = event.target.value;
         this.setState({ ...this.state, data: updatedFields, touched: touchedFields });
+    };
+
+    handlePhoneInputChange = event => {
+        // Handle two-way binding - Update Immutably
+        const updatedFields = {...this.state.activePhone};
+        const touchedFields = {...this.state.touched};
+        // touch the current field
+        if (!touchedFields[event.target.name]) {
+            touchedFields[event.target.name] = this.state.activePhone[event.target.name];
+        }
+        if (event.target.name === 'is_primary') {
+            updatedFields['is_primary'] = !this.state.activePhone.is_primary
+        } else {
+            updatedFields[event.target.name] = event.target.value;
+        }
+        this.setState({ ...this.state, activePhone: updatedFields, touched: touchedFields });
     };
 
     handleDateChange = date => {
@@ -254,9 +345,29 @@ class Profile extends Component {
         });
     };
 
-    toggleAddModal = () => {
+    toggleAddEditPhoneModal = () => {
         this.setState({
             add_modal: !this.state.add_modal
+        });
+    };
+
+    showAddEditPhoneModal = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const uri = event.target.parentElement.getAttribute('href');
+        const id = uri.split('/').pop();
+        const numberObj = this.state.phone_numbers.filter(number => id === number.id);
+        console.log(numberObj);
+        this.setState({
+            add_modal: true,
+            activePhone: {
+                uri: uri,
+                id: numberObj[0].id,
+                country_code: numberObj[0].country_code,
+                number: numberObj[0].number,
+                type: parseInt(numberObj[0].type),
+                is_primary: numberObj[0].is_primary
+            }
         });
     };
 
@@ -311,7 +422,10 @@ class Profile extends Component {
                         <p><strong>{number_type}</strong></p>
                     </MDBCol>
                     <MDBCol md="8">
-                        <p>{phone_number} {is_primary ? '(Primary)' : ''} <a href={link} onClick={this.showConfirmModal}><MDBIcon icon="trash" size="1x" className="red-text ml-3" /></a> <a href="#1"><MDBIcon icon="pencil-alt" size="1x" className="light-blue-text ml-2" /></a></p>
+                        <p>{phone_number} {is_primary ? '(Primary)' : ''}
+                            <a href={link} onClick={this.showConfirmModal}><MDBIcon icon="trash" size="1x" className="red-text ml-3" /></a>
+                            <a href={link} onClick={this.showAddEditPhoneModal}><MDBIcon  icon="pencil-alt" size="1x" className="light-blue-text ml-2" /></a>
+                        </p>
                     </MDBCol>
                 </MDBRow>
             </div>
@@ -449,14 +563,14 @@ class Profile extends Component {
                             success="right"
                             name="number"
                             value={this.state.activePhone.number}
-                            onChange={this.handleInputChange}
+                            onChange={this.handlePhoneInputChange}
                             required
                         />
                         <div className="valid-feedback">Looks good!</div>
                         <SelectInput
                             name="type"
                             required={true}
-                            onChange={this.handleInputChange}
+                            onChange={this.handlePhoneInputChange}
                         >
                             <SelectOptions
                                 placeholder="Type of Number"
@@ -470,10 +584,11 @@ class Profile extends Component {
                                     name="is_primary"
                                     type="checkbox"
                                     className="custom-control-input"
-                                    id="defaultUnchecked"
-                                    onChange={this.handleInputChange}
+                                    id="is_primary"
+                                    checked={this.state.activePhone.is_primary}
+                                    onChange={this.handlePhoneInputChange}
                                 />
-                                <label className="custom-control-label" htmlFor="defaultUnchecked">Primary Number</label>
+                                <label className="custom-control-label" htmlFor="is_primary">Primary Number</label>
                             </div>
                         </div>
                     </div>
@@ -534,7 +649,7 @@ class Profile extends Component {
                                     <MDBRow>
                                         <MDBCol>
                                             <div className="pb-4">
-                                                <MDBBtn className="ml-0" onClick={this.toggleAddModal} color="teal" type="submit">
+                                                <MDBBtn className="ml-0" onClick={this.toggleAddEditPhoneModal} color="teal" type="submit">
                                                     Add Phone Number<MDBIcon far icon="plus-square" className="ml-1" />
                                                 </MDBBtn>
                                             </div>
@@ -560,13 +675,13 @@ class Profile extends Component {
                 </MDBContainer>
 
                 <MDBContainer>
-                    <MDBModal isOpen={this.state.add_modal} toggle={this.toggleAddModal}>
-                        <MDBModalHeader toggle={this.toggleAddModal}>Update Phone Number</MDBModalHeader>
+                    <MDBModal isOpen={this.state.add_modal} toggle={this.toggleAddEditPhoneModal}>
+                        <MDBModalHeader toggle={this.toggleAddEditPhoneModal}>Update Phone Number</MDBModalHeader>
                         <MDBModalBody>
                             {this.phoneFormBody()}
                         </MDBModalBody>
                         <MDBModalFooter>
-                            <MDBBtn color="amber">Save changes</MDBBtn>
+                            <MDBBtn color="amber"onClick={this.handlePhoneSubmit}>Save changes</MDBBtn>
                         </MDBModalFooter>
                     </MDBModal>
                 </MDBContainer>
@@ -579,7 +694,7 @@ class Profile extends Component {
                             <h3>{this.state.deleteNumber.number}</h3>
                         </MDBModalBody>
                         <MDBModalFooter>
-                            <MDBBtn color="grey"onClick={this.toggleConfirmModal}>Cancel</MDBBtn>
+                            <MDBBtn color="grey" onClick={this.toggleConfirmModal}>Cancel</MDBBtn>
                             <MDBBtn color="red" onClick={this.handleDeleteNumber}>Yes, Delete it</MDBBtn>
                         </MDBModalFooter>
                     </MDBModal>
