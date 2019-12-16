@@ -23,7 +23,6 @@ class Logout extends Component {
             this.props.onLoggedOut();
         }).catch(error => {
             this.setState({error: error.response.data.messages});
-            console.error(error.response.data.messages); // TODO Remove this
         });
     }
 

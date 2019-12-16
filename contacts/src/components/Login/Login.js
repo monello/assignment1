@@ -30,15 +30,12 @@ class Login extends Component {
             username        : this.state.fields.username,
             password        : this.state.fields.password
         };
-        console.log("Submit Data:", submitData); // TODO remove this when done
         axios.post(
             '/api/session',
             submitData,
             { headers: { 'Content-Type': 'application/json' } }
         ).then(response => {
-            console.log(response);
             const data = response.data.data;
-            console.log("Data: ", data); // TODO Remove this when done
             // set the global logged in status
             const payload = {
                 sessionId           : data.user.session_id,
@@ -53,11 +50,9 @@ class Login extends Component {
             this.props.history.push({pathname: '/profile'});
         }).catch(error => {
             if (parseInt(error.response.data.statusCode) === 401) {
-                console.info("A:", error.response.data.messages);
                 this.setState({alertHidden: false, alertMessage: error.response.data.messages});
             } else {
                 this.setState({error: error.response.data.messages});
-                console.error("B:", error.response.data); // TODO Remove this
             }
         });
     };

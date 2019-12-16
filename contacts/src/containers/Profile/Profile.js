@@ -76,7 +76,6 @@ class Profile extends Component {
                 contactNumbers.forEach((number,index) => {
                     numberVisibilityMap[number.id] = 'contactNumberRow visible';
                 });
-                console.log(numberVisibilityMap);
                 let updatedState = {
                     ...this.state,
                     data: userData,
@@ -93,7 +92,6 @@ class Profile extends Component {
 
         axios.get('/api/list/countries')
             .then(response => {
-                console.log(response);
                 const countries = response.data.data.countries;
                 this.setState({
                     ...this.state,
@@ -149,14 +147,11 @@ class Profile extends Component {
             } }
         ).then(response => {
             const data = response.data.data;
-            console.log("Data: ", data); // TODO Remove this when done
-            console.log(this.state.data);
             // clean out the touched data
             this.setState({touched: {}});
             this.toggleEditModal();
         }).catch(error => {
             this.setState({error: error.response.data.messages});
-            console.error(error.response.data.messages); // TODO Remove this
         });
     };
 
@@ -172,8 +167,6 @@ class Profile extends Component {
             type            : this.state.activePhone.type,
             is_primary      : !!+this.state.activePhone.is_primary
         };
-        console.log("SUBMIT DATA:", submitData);
-
         if (this.state.activePhone.id) {
             axios.put(
                 '/api/user/' + userId + '/contactnumber/' + this.state.activePhone.id,
@@ -184,8 +177,6 @@ class Profile extends Component {
                     } }
             ).then(response => {
                 const data = response.data.data;
-                console.log("Data: ", data); // TODO Remove this when done
-                console.log(this.state.data);
                 // clean out the touched data
                 this.setState({
                     touched: {},
@@ -200,7 +191,6 @@ class Profile extends Component {
                 this.toggleAddEditPhoneModal();
             }).catch(error => {
                 this.setState({error: error.response.data.messages});
-                console.error(error.response.data.messages); // TODO Remove this
             });
         } else {
             axios.post(
@@ -212,8 +202,6 @@ class Profile extends Component {
                     } }
             ).then(response => {
                 const data = response.data.data;
-                console.log("Data: ", data); // TODO Remove this when done
-                console.log(this.state.data);
                 // clean out the touched data
                 this.setState({
                     touched: {},
@@ -228,7 +216,6 @@ class Profile extends Component {
                 this.toggleAddEditPhoneModal();
             }).catch(error => {
                 this.setState({error: error.response.data.messages});
-                console.error(error.response.data.messages); // TODO Remove this
             });
         }
 
@@ -290,15 +277,12 @@ class Profile extends Component {
                 } }
         ).then(response => {
             const data = response.data.data;
-            console.log("Data: ", data); // TODO Remove this when done
-            console.log(this.state.data);
             let numberVisibilityMap = {...this.state.numberVisibilityMap};
             numberVisibilityMap[deleteNumber.id] = "contactNumberRow hidden";
             this.setState({numberVisibilityMap: numberVisibilityMap});
             this.toggleConfirmModal();
         }).catch(error => {
             // this.setState({error: error.response.data.messages});
-            // console.error(error.response.data.messages); // TODO Remove this
             this.toggleConfirmModal();
         });
     };
@@ -357,7 +341,6 @@ class Profile extends Component {
         const uri = event.target.parentElement.getAttribute('href');
         const id = uri.split('/').pop();
         const numberObj = this.state.phone_numbers.filter(number => id === number.id);
-        console.log(numberObj);
         this.setState({
             add_modal: true,
             activePhone: {
